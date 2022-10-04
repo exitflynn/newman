@@ -27,7 +27,7 @@ populate: artefacts/quotes.json cmd/quotes.json internal/quotes.json
 
 # Remove all generated quotes artefacts and initialize the original one.
 cleanup:
-	@convenience.sh
+	@./convenience.sh
 
 # Install the required dependencies.
 install:
@@ -36,12 +36,11 @@ install:
 # Container cleanup.
 docker-clean:
 	@docker kill mssql && docker rm mssql
-
 # Start containers.
 docker-run:
-	@docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=Qwertyuiop1#" -p 1433:1433 --name mssql -h mssql -d mcr.microsoft.com/mssql/server:2019-latest
+	@sudo docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=Qwertyuiop1#" -p 1433:1433 --name mssql -d mcr.microsoft.com/mssql/server:2022-latest
 	@sleep 10
 
 # Run the bot.
-run: cleanup populate install docker-clean docker-run
+run: cleanup populate install docker-run docker-clean
 	@go run ./...
