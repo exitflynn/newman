@@ -73,7 +73,7 @@ func (b *Bot) Nsdel(e *gateway.MessageCreateEvent) (string, error) {
 			return "", fmt.Errorf("failed to show rows: %v", err)
 		}
 		msgRows := strings.Split(msgs, "\n")
-		msgReq := msgRows[len(msgRows)-num-1:]
+		msgReq := msgRows[len(msgRows)-num:]
 		s := strings.Join(msgReq, "\n")
 		return s, nil
 	} else {
