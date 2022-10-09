@@ -38,9 +38,9 @@ docker-clean:
 	@docker kill mssql && docker rm mssql
 # Start containers.
 docker-run:
-	@sudo docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=Qwertyuiop1#" -p 1433:1433 --name mssql -d mcr.microsoft.com/mssql/server:2022-latest
+	@sudo docker run -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=Qwertyuiop1#" --name mssql -p 1433:1433 -d mcr.microsoft.com/mssql/server:2019-latest
 	@sleep 10
 
 # Run the bot.
-run: cleanup populate install docker-run docker-clean
+run: 
 	@go run ./...

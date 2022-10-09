@@ -35,7 +35,7 @@ var (
 
 func initializeDatabase() (*sql.DB, error) {
 	db, err := sql.Open("mssql",
-		fmt.Sprintf("server=%s;user id=%s;password=%s;database=%s", R.server, R.userId, R.password, R.databaseName))
+		fmt.Sprintf("server=%s;user id=%s;password=%s;database=%s", R.server, R.userId, "Qwertyuiop1#", R.databaseName))
 	if err != nil {
 		return nil, fmt.Errorf("failed to initialize database: %v", err)
 	}

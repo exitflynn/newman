@@ -58,12 +58,31 @@ func (b *Bot) Nshow(*gateway.MessageCreateEvent) (string, error) {
 }
 
 //go:generate echo "\"nsdel\": \"Show all deleted messages.\","
-func (b *Bot) Nsdel(*gateway.MessageCreateEvent) (string, error) {
-	s, err := showRows(queries.Q[queries.SHOWDELETEDMESSAGES])
-	if err != nil {
+func (b *Bot) Nsdel(e *gateway.MessageCreateEvent) (string, error) {
+	op := "nsdel"
+	content := e.Content
+	prefixLength := strings.Index(e.Content, op) + len(op) + 1
+	if len(content) > prefixLength {
+		strNum := strings.TrimSpace(content[prefixLength:])
+		num, numErr := strconv.Atoi(strNum)
+		if numErr != nil {
+			return "", fmt.Errorf("`failed to read message count upper limit`")
+		}
+		msgs, err := showRows(queries.Q[queries.SHOWDELETEDMESSAGES])
+		if err != nil {
+			return "", fmt.Errorf("failed to show rows: %v", err)
+		}
+		msgRows := strings.Split(msgs, "\n")
+		msgReq := msgRows[len(msgRows)-num-1:]
+		s := strings.Join(msgReq, "\n")
+		return s, nil
+	} else {
+		s, err := showRows(queries.Q[queries.SHOWDELETEDMESSAGES])
+		if err != nil {
 		return "", fmt.Errorf("failed to show rows: %v", err)
+		}
+		return s, nil
 	}
-	return s, nil
 }
 
 //go:generate echo "\"nadd\": \"Add a notepad entry.\","
